@@ -2,7 +2,6 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
-from models import Meals
 
 
 app = Flask(__name__)
@@ -12,8 +11,20 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 
-# db.create_all()
-# db.session.commit()
+db.create_all()
+db.session.commit()
+
+
+class Meals (db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    price = db.Column(db.Integer)
+    name = db.Column(db.String(100), unique=True, nullable=False)
+    ingredients = db.Column(db.String(500))
+    isSpicy = db.Column(db.Boolean, default=False)
+    isVegan = db.Column(db.Boolean, default=False)
+    isGlutenFree = db.Column(db.Boolean, default=False)
+    description = db.Column(db.String(500))
+
 
 @app.route('/')
 def index():
@@ -31,7 +42,8 @@ def get_Meals():
 
 
 def get_meal_details(meal):
-    return {'name': meal.name,
+    return {'id': meal.id,
+            'name': meal.name,
             'price': meal.price,
             'ingredients': meal.ingredients,
             'isSpicy': meal.isSpicy,
@@ -43,7 +55,7 @@ def get_meal_details(meal):
 
 @app.route('/Meal/<id>')
 def get_FMeals(id):
-    meal = Meals.query_all().get_or_404(id)
+    meal = Meals.query.get_or_404(id)
     return jsonify(get_meal_details(meal))
 
 

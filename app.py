@@ -14,12 +14,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql+psycopg2://postgres:Syed@121
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SECRET_KEY'] = 'Th1s1ss3cr3t'
 
-
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
-
-
-
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -39,24 +35,6 @@ class Meals (db.Model):
     description = db.Column(db.String(500))
 db.create_all()
 db.session.commit()
-
-def admin_token_required(f):
-    @wraps(f)
-    def decorator(*args, **kwargs):
-        token = None
-        if 'x-access-tokens' in request.headers:
-            token = request.headers['x-access-tokens']
-
-        if not token:
-            return error_handler(400, "Valid token is missing")
-
-        token = request.headers['x-access-tokens']
-        user_id = jwt.decode(token,app.config['SECRET_KEY'], algorithms=["HS256"]).get("id")
-        current_user = Users.query.filter_by(id=user_id).first()
-        if not current_user.admin:
-            return error_handler(401, "Unauthorized Access!")
-        return f(*args, **kwargs)
-    return decorator
 
 def token_required(is_admin):
     def decorator(f):
@@ -140,7 +118,7 @@ def index():
     return success_handler("Welcome to Meals REST API")
 
 @app.route('/createMeal', methods=['POST'])
-@token_required(is_admin=False)
+@token_required(is_admin=True)
 def create_Meal():
    
    data = request.get_json() 
@@ -189,7 +167,7 @@ def get_meal_details(meal):
             }
 
 @app.route('/updateMeal/<id>',methods=['POST'])
-@token_required(is_admin=False)
+@token_required(is_admin=True)
 def update(id):
     meal=Meals.query.filter_by(mealId=id)
     data=request.get_json()

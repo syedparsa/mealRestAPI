@@ -10,7 +10,7 @@ from functools import wraps
 
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgresql+psycopg2://postgres:Syed@1214@localhost:5432/mealsDB'
+app.config["SQLALCHEMY_DATABASE_URI"] = 'postgres://vwhqofoyzcbtyi:b9d87e9c1f48ed6dc57ec056725b99c16df8a99464c94532ae04539dabe818e6@ec2-34-242-89-204.eu-west-1.compute.amazonaws.com:5432/d7t23r8mi4ir62'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SECRET_KEY'] = 'Th1s1ss3cr3t'
 
@@ -78,7 +78,7 @@ def signup_user():
     if Users.query.filter_by(name=name).first() is not None:
         return error_handler(403, "User already exists!")
 
-    hashed_password = generate_password_hash(password, method='sha256')
+    hashed_password = generate_passworpid_hash(password, method='sha256')
 
     new_user = Users( name=name, password=hashed_password, admin=False) 
     db.session.add(new_user)

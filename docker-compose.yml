@@ -1,8 +1,0 @@
-version: '3.4'
-
-services:
-  mealsapi:
-    image: mealsapi
-    build:
-      context: .
-      dockerfile: ./Dockerfile

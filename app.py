@@ -10,7 +10,7 @@ from functools import wraps
 
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = 'postgres://vwhqofoyzcbtyi:b9d87e9c1f48ed6dc57ec056725b99c16df8a99464c94532ae04539dabe818e6@ec2-34-242-89-204.eu-west-1.compute.amazonaws.com:5432/d7t23r8mi4ir62'
+app.config["DATABASE_URL"] ='postgres://khbjjuusbhztzo:6e3ffe89e02363413236a1a658cada7dc5e50e1c5b120a1be8c39a33d621582a@ec2-34-241-19-183.eu-west-1.compute.amazonaws.com:5432/dmuftpqtlgggo'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 app.config['SECRET_KEY'] = 'Th1s1ss3cr3t'
 
